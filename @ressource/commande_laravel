@@ -1,0 +1,8 @@
+php artisan // Permet de lister toutes les commandes disponibles dans Laravel (artisan)
+php artisan Route:list // Permet de lister toutes les routes de l'application
+php artisan make:controller CvthequeController // Permet de créer un controller
+ // Permet de créer un model et une migration
+php artisan migrate   // Permet de créer les tables dans la base de données depuis les tables créer dans le dossier database/migrations
+php artisan make:Controller CompetenceController --resource // Permet de créer un controller avec toutes les méthodes CRUD (create, read, update, delete) et les routes associées à ces méthodes (GET, POST, PUT, DELETE)
+ php artisan make:request CompetenceRequest // Permet de créer une classe de validation pour les données entrantes (request) et de créer les règles de validation dans la méthode rules() de la classe de validation (CompetenceRequest)
+
