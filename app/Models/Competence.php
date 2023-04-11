@@ -18,6 +18,18 @@ class Competence extends Model
     protected $fillable = ['intitule', 'description'];
 
 
+    /**
+     * Une compétence (Modèle) est partagé par plusieurs (belongToMany) professionnels
+     * Récupération de tous les professionnels possédant telle ou telle compétence
+     * ->withTimestamps() pour prendre en considération les rubriques supplémentaires (autres que les clés rapportés)
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function professionnels(){
+        return $this->belongsToMany(Professionnel::class)->withTimestamps();
+
+    }
+
+
 
 
 }

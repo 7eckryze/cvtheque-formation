@@ -15,11 +15,12 @@ class MetierController extends Controller
      */
     public function index()
     {
-        $metiers = Metier::get();
+        $metiers = Metier::paginate(5);
         $data = [
             'title' => 'Les métiers de la ' . config('app.name'),
             'description' => 'Retrouver tous les métiers de la ' . config('app.name'),
             'metiers' => $metiers,
+            'search' => '',
         ];
 
         return view('metiers.index', $data);
@@ -35,6 +36,7 @@ class MetierController extends Controller
         $data = [
             'title' => 'Les métiers de la ' . config('app.name'),
             'description' => 'Retrouver tous les métiers de la ' . config('app.name'),
+            'search' => '',
         ];
 
         return view('metiers.create', $data);
@@ -66,6 +68,7 @@ class MetierController extends Controller
             'title' => 'Les métiers de la ' . config('app.name'),
             'description' => 'Retrouver tous les métiers de la ' . config('app.name'),
             'metier' => $metier,
+            'search' => '',
         ];
 
         return view('metiers.show', $data);
@@ -83,6 +86,7 @@ class MetierController extends Controller
             'title' => 'Les métiers de la ' . config('app.name'),
             'description' => 'Retrouver tous les métiers de la ' . config('app.name'),
             'metier' => $metier,
+            'search' => '',
         ];
 
         return view('metiers.edit', $data);
@@ -111,9 +115,29 @@ class MetierController extends Controller
      */
     public function destroy(Metier $metier)
     {
+
         $metier->delete();
         $info = "Le métier a été supprimé avec succès";
-        return back()->withInformation($info);
+        return redirect()->route('metiers.index')->withInformation($info);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  object $metier
+     * @return \Illuminate\Http\Response
+     */
+    public function delete (Metier $metier)
+    {
+        $data = [
+            'title' => 'Les métiers de la ' . config('app.name'),
+            'description' => 'Retrouver tous les métiers de la ' . config('app.name'),
+            'metier' => $metier,
+            'search' => '',
+        ];
+
+        return view('metiers.delete', $data);
+
 
     }
 }

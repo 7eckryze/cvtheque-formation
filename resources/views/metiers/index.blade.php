@@ -64,8 +64,8 @@
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="{{route('metiers.destroy', $metier->id)}}" method="post">
-                                        @method('DELETE')
+                                    <form action="{{route('metiers.delete', $metier->id)}}" method="post">
+                                        @method('GET')
                                         @csrf
                                         <button type="submit" class="btn btn-danger">Supprimer</button>
                                     </form>
@@ -76,6 +76,9 @@
                         {{-- FIN BOUCLE --}}
                         </tbody>
                     </table>
+                    <footer class="pagination center justify-content-center">
+                        {{$metiers->links()}}
+                    </footer>
                 </div>
             </div>
         </div>

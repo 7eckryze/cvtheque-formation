@@ -12,9 +12,9 @@ class CompetenceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         // Différentes manières de récupérer les données
         //$competences = Competence::all();
@@ -38,11 +38,17 @@ class CompetenceController extends Controller
         //return view('competences.index', compact('competences'));
 
         //2ᵉ façon de récupérer les données
-        $competences = Competence::get();
+        if ($request->input('search')) {
+            $competences = Competence::where('intitule', 'LIKE', '%' . $request->input('search') . '%')->orderBy('intitule')->paginate(5);
+        } else {
+            $competences = Competence::orderBy('intitule')->paginate(5);
+        }
+
         $data = [
             'title' => 'Les compétences de la ' . config('app.name'),
             'description' => 'Retrouver toutes les compétences de la ' . config('app.name'),
             'competences' => $competences,
+            'search' => $request->input('search') ?: '',
             ];
 
         return view('competences.index', $data);
@@ -52,7 +58,7 @@ class CompetenceController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function create()
     {
@@ -60,6 +66,7 @@ class CompetenceController extends Controller
         $data = [
             'title' => 'Les compétences de la ' . config('app.name'),
             'description' => 'Retrouver toutes les compétences de la ' . config('app.name'),
+            'search' => '',
         ];
 
         return view('competences.create', $data);
@@ -86,7 +93,7 @@ class CompetenceController extends Controller
      * Display the specified resource.
      *
      * @param object $competence
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show(Competence $competence)
     {
@@ -95,7 +102,10 @@ class CompetenceController extends Controller
         $data = [
             'title' => 'Les compétences de la ' . config('app.name'),
             'description' => 'Retrouver toutes les compétences de la ' . config('app.name'),
-            'competence' => $competence        ];
+            'competence' => $competence,
+        'search' => '',
+        ];
+
 
         return view('competences.show', $data);
     }
@@ -104,7 +114,7 @@ class CompetenceController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param object $competence
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Competence $competence)
     {
@@ -113,6 +123,7 @@ class CompetenceController extends Controller
             'title' => 'Les compétences de la ' . config('app.name'),
             'description' => 'Retrouver toutes les compétences de la ' . config('app.name'),
             'competence' => $competence,
+            'search' => '',
         ];
 
         return view('competences.edit', $data);
@@ -145,4 +156,5 @@ class CompetenceController extends Controller
         $info = "La compétence a été supprimé avec succès";
         return back()->withInformation($info);
     }
+
 }

@@ -19,7 +19,7 @@
     <!-- Latest compiled and minified CSS select multiple-->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css">
 </head>
 
 <body>
@@ -34,22 +34,8 @@
         </button>-->
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Themes <span
-                            class="caret"></span></a>
-                    <div class="dropdown-menu" aria-labelledby="themes">
-                        <a class="dropdown-item" href="../default/">Default</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="../cerulean/">Cerulean</a>
-                        <a class="dropdown-item" href="../cosmo/">Cosmo</a>
-
-                    </div>
-                </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../help/">Help</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://blog.bootswatch.com/">Blog</a>
+                    <a class="nav-link" href="{{route('professionnels.index')}}">Les CV</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">Paramètres<span
@@ -60,6 +46,20 @@
                         <a class="dropdown-item" href="{{route('metiers.index')}}">Métiers</a>
                     </div>
                 </li>
+
+                <form method="post" action="{{route('professionnels.index')}}">
+                    @method('GET')
+                    @csrf
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <input type="text" name="search" class="form-control" id="search" value="{{$search}}"
+                                   placeholder="Rechercher un professionnel">
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="submit" class="btn btn-danger">Rechercher</button>
+                        </div>
+                    </div>
+                </form>
             </ul>
         </div>
     </div>
@@ -103,6 +103,6 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/bootstrap-select.min.js"></script>
 </body>
 </html>

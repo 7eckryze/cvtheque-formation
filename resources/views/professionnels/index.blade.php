@@ -7,17 +7,27 @@
     <div class="bs-docs-section pos-bloc-section">
         <div class="row">
             <div class="col-lg-10">
+                <select onchange="location.href=this.value" name="metiers" id="metiers">
+                    <option value="{{route('professionnels.index')}}" @unless($slug) selected @endunless>
+                        Tous les métiers
+                    </option>
+                    @foreach($metiers as $metier)
+                        <option value="{{route('professionnels.metier', ['slug'=>$metier->slug])}}"
+                            {{$slug == $metier->slug ? 'selected' : ''}}>
+                            {{$metier->libelle}}</option>
+                    @endforeach
+                </select>
 
-                <form method=post action="{{route('competences.index')}}">
+                <form method="post" action="{{route('professionnels.index')}}">
                     @method('GET')
                     @csrf
                     <div class="row">
                         <div class="col-lg-9">
-                            <input type="text" name="search" class="form-control" id="search" value="{{$search}}"
-                                   placeholder="Rechercher une compétence">
+                            <input type="text" name="comp" class="form-control" id="comp" value="{{$comp}}"
+                                   placeholder="Rechercher des professionnels en fonction de leurs compétences">
                         </div>
                         <div class="col-lg-1">
-                            <button type="submit" class="btn btn-primary">Rechercher</button>
+                            <button type="submit" class="btn btn-danger">Rechercher</button>
                         </div>
                     </div>
                 </form>
@@ -25,7 +35,8 @@
 
             </div>
             <div class="col-lg-2 ">
-                <a href="{{route('competences.create')}}" class="btn btn-primary float-right">Créer une compétence</a>
+                <a href="{{route('professionnels.create')}}" class="btn btn-primary float-right">Créer un
+                    professionnel</a>
             </div>
         </div>
     </div>
@@ -42,61 +53,76 @@
         </div>
     @endif
     {{-- FIN GESTION INFO --}}
-    <div class="col-lg-12 lg-5">
+    <div class="col-lg-12">
         <div class="page-header">
-            <h4 id="tables">Listes des compétences</h4>
+            <h4 id="tables">Listes des professionnels</h4>
         </div>
 
         <div class="bs-component">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Numéro</th>
-                    <th scope="col">Intitulé</th>
+                    <th scope="col">Identifiant</th>
+                    <th scope="col">Prénom et nom</th>
+                    <th scope="col">Métier exercé</th>
+                    <th scope="col">Domiciliation</th>
+                    <th scope="col">Formation</th>
                     <th scope="col" colspan="3"></th>
                 </tr>
                 </thead>
                 <tbody>
                 {{--BOUCLE POUR RECUPERATION DES COMPTENCES --}}
-                @foreach($competences as $competence)
+                @forelse($professionnels as $professionnel)
                     <tr>
-                        <td>{{$competence->id}}</td>
-                        <td>{{$competence->intitule}}</td>
+                        <td>{{$professionnel->id}}</td>
+                        <td>{{$professionnel->prenom}} {{$professionnel->nom}}</td>
+                        <td>{{$professionnel->metier->libelle}}</td>
+                        <td>{{$professionnel->cp}} {{$professionnel->ville}}</td>
+                        <td>@if($professionnel->formation == 0)
+                                Non
+                            @else
+                                Oui
+                            @endif</td>
                         <td>
-                            <form action="{{route('competences.show', $competence->id)}}" method="post">
+                            <form action="{{route('professionnels.show', $professionnel->id)}}" method="post">
                                 @method('GET')
                                 @csrf
                                 <button type="submit" class="btn btn-primary">Consulter</button>
                             </form>
                         </td>
                         <td>
-                            <form action="{{route('competences.edit', $competence->id)}}" method="post">
+                            <form action="{{route('professionnels.edit', $professionnel->id)}}" method="post">
                                 @method('GET')
                                 @csrf
                                 <button type="submit" class="btn btn-warning">Modifier</button>
                             </form>
                         </td>
                         <td>
-                            <form action="{{route('competences.destroy', $competence->id)}}" method="post">
+                            <form action="{{route('professionnels.destroy', $professionnel->id)}}" method="post">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-danger">Supprimer</button>
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="8">Aucun professionnel enregistré</td>
+                    </tr>
+                @endforelse
 
                 {{-- FIN BOUCLE --}}
                 </tbody>
             </table>
             <footer class="pagination center justify-content-center">
-                {{$competences->links()}}
+                {{$professionnels->links()}}
             </footer>
         </div>
     </div>
     </div>
     </div>
 @endsection
+
 
 
 

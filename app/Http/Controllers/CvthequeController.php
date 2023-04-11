@@ -8,6 +8,7 @@ class CvthequeController extends Controller
 {
     public function index()
     {
-        return view('cvtheque');
+        $data = ['search' => ''];
+        return view('cvtheque', $data);
     }
 }

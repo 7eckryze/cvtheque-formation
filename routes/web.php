@@ -1,7 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{CvthequeController, CompetenceController, MetierController};
+use App\Http\Controllers\{
+    CvthequeController,
+    CompetenceController,
+    MetierController,
+    ProfessionnelController};
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +24,18 @@ use App\Http\Controllers\{CvthequeController, CompetenceController, MetierContro
 
 Route::get('/', [CvthequeController::class, 'index'])->name('accueil');
 
-Route::resource('competences', CompetenceController::class);
-Route::resource('metiers', MetierController::class);
+Route::get('/competence/search', [CompetenceController::class, 'index'])->name('competences.search');
 
+Route::resource('competences', CompetenceController::class);
+
+Route::get('/professionnels/search', [ProfessionnelController::class, 'index'])->name('professionnels.search');
+
+Route::get('metier/{slug}/professionels', [ProfessionnelController::class, 'index'])->name('professionnels.metier');
+
+Route::resource('professionnels', ProfessionnelController::class);
+
+//Route pour une supression de métier indirecte (via la suppression d'un professionnel)
+
+Route::get('/metiers/{metier}/delete', [MetierController::class, 'delete'])->name('metiers.delete');
+Route::resource('metiers', MetierController::class);
 
