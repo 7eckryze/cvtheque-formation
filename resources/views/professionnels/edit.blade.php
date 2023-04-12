@@ -249,15 +249,29 @@
 
 
                             <div class="form-group">
-                                <label for="image">Sélectionnez votre CV au format PDF :</label>
-                                <input type="file" name="pdf" accept="application/pdf">
-                                <br><br>
+                                @if($professionnel->pdf)
+                                    <div class="selected-file">CV actuel : {{ $professionnel->pdf }}</div>
+                                @endif
+                                <br>
+                                <label for="pdf">Sélectionnez votre nouveau CV au format PDF :</label>
+                                    <button type="button" class="btn btn-primary" onclick="document.getElementById('pdf').click();">
+                                        Choisir un fichier
+                                    </button>
+                                    <input type="file" id="pdf" name="pdf" accept="application/pdf" style="display: none;"
+                                           onchange="document.getElementById('pdf-name').innerHTML = this.value.split('\\').pop();">
+                                <span id="pdf-name"></span>
+                                <br>
                                 @if ($errors->has('pdf'))
                                     <div class="alert alert-danger">
                                         {{ $errors->first('pdf') }}
                                     </div>
                                 @endif
                             </div>
+
+                            <br>
+
+
+
 
 
 

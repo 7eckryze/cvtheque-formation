@@ -68,14 +68,29 @@ class ProfessionnelController extends Controller
      * @param \Illuminate\Http\Request $professionnelRequest
      * @return \Illuminate\Http\Response
      */
-    public function store(ProfessionnelRequest $professionnelRequest)
+    public function store(ProfessionnelRequest $request)
     {
-        //dd($professionnelRequest->input('domaine'));
+        $validationData = $request->all();
+        $validationData['domaine'] = implode(',', $request->input('domaine'));
 
-        $validationData = $professionnelRequest->all();
-        $validationData['domaine'] = implode(',', $professionnelRequest->input('domaine'));
+        $pdf = $request->file('pdf');
+        if ($pdf) {
+            // Génère le nouveau nom de fichier
+            $nom = $request->input('nom');
+            $prenom = $request->input('prenom');
+            $date = date('dmY');
+            $extension = $pdf->getClientOriginalExtension();
+            $newFilename = $prenom . '_' . $nom . '_' . $date . '.' . $extension;
+
+            // Stocke le fichier PDF dans le dossier "pdf" de votre espace de stockage public
+            $pdfPath = $pdf->storeAs('pdf', $newFilename, 'public');
+
+            // Ajoute le nom de fichier PDF au champ "pdf" du tableau $validationData
+            $validationData['pdf'] = $newFilename;
+        }
+
         $newProfessionnel = Professionnel::create($validationData);
-        $newProfessionnel->competences()->attach($professionnelRequest->comp);
+        $newProfessionnel->competences()->attach($request->comp);
 
         $info = "Le professionnel a été créé avec succès";
         return redirect()->route('professionnels.index')->withInformation($info);
@@ -170,9 +185,10 @@ class ProfessionnelController extends Controller
         $validationData['domaine'] = implode(',', $request->input('domaine'));
 
         $pdf = $request->file('pdf');
-
-        $pdf = $request->file('pdf');
         if ($pdf) {
+            if ($professionnel->pdf) {
+                Storage::disk('public')->delete('pdf/' . $professionnel->pdf);
+            }
             // Génère le nouveau nom de fichier
             $nom = $professionnel->nom;
             $prenom = $professionnel->prenom;
@@ -208,6 +224,7 @@ class ProfessionnelController extends Controller
      */
     public function destroy(professionnel $professionnel)
     {
+        unlink('storage/pdf/' . $professionnel->pdf);
         $professionnel->delete();
         $info = "Le professionnel a été supprimé avec succès";
         return redirect()->route('professionnels.index')->withInformation($info);

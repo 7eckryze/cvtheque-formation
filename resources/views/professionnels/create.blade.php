@@ -11,7 +11,7 @@
                     <h4 id="tables">Fiche professionnel : Création</h4>
                 </div>
                 <div class="bs-component">
-                    <form method="post" action="{{route('professionnels.store')}}">
+                    <form method="post" action="{{route('professionnels.store')}}" enctype="multipart/form-data">
                         {{-- METHOD ET CSRF --}}
                         @method('POST')
                         @csrf
@@ -250,6 +250,23 @@
                                 <textarea class="form-control" placeholder="Entrer une osbervation" name="observation"
                                           id="observation" rows="4" cols="5">{{old('observation')}}</textarea>
                             </div>
+
+                            <label for="pdf">Sélectionnez votre nouveau CV au format PDF :</label>
+                            <button type="button" class="btn btn-primary" onclick="document.getElementById('pdf').click();">
+                                Choisir un fichier
+                            </button>
+                            <input type="file" id="pdf" name="pdf" accept="application/pdf" style="display: none;"
+                                   onchange="document.getElementById('pdf-name').innerHTML = this.value.split('\\').pop();">
+                            <span id="pdf-name"></span>
+                            <br>
+                            @if ($errors->has('pdf'))
+                                <div class="alert alert-danger">
+                                    {{ $errors->first('pdf') }}
+                                </div>
+                    @endif
+                </div>
+
+                <br>
 
                             <a href="{{route('professionnels.index')}}" class="btn btn-primary">Retour</a>
                             <button type="submit" class="btn btn-primary float-end">Créer</button>
